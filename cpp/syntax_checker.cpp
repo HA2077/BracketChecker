@@ -1,22 +1,19 @@
 #include "syntax_checker.h"
 #include <stack>
 
-bool SyntaxChecker::isOpen(char c, Mode m)
-{
+bool SyntaxChecker::isOpen(char c, Mode m){
     if (m == Mode::HTML)
         return false;
     return c == '{' || c == '[' || c == '(';
 }
 
-bool SyntaxChecker::isClose(char c, Mode m)
-{
+bool SyntaxChecker::isClose(char c, Mode m){
     if (m == Mode::HTML)
         return false;
     return c == '}' || c == ']' || c == ')';
 }
 
-char SyntaxChecker::matchingOpen(char close)
-{
+char SyntaxChecker::matchingOpen(char close){
     if (close == ')')
         return '(';
     if (close == ']')
@@ -26,40 +23,36 @@ char SyntaxChecker::matchingOpen(char close)
     return 0;
 }
 
-void SyntaxChecker::skipString(const std::string &s, int &i)
-{
+void SyntaxChecker::skipString(const std::string &s, int &i){
     i++;
-    while (i < (int)s.size() && s[i] != '"')
-    {
-        if (s[i] == '\\')
-        {
+    while (i < (int)s.size()){
+        if (s[i] == '\\'){
+            i += 2;
+            continue;
+        }
+        if (s[i] == '"'){
             i++;
+            break;
         }
         i++;
     }
 }
 
-CheckResult SyntaxChecker::check(const std::string &input, Mode mode)
-{
+CheckResult SyntaxChecker::check(const std::string &input, Mode mode){
     std::stack<Frame> stck;
     CheckResult result{true, {}};
 
-    for (int i = 0; i < (int)input.size(); ++i)
-    {
+    for (int i = 0; i < (int)input.size(); ++i){
         char c = input[i];
 
-        if (c == '"' && mode == Mode::JSON)
-        {
+        if (c == '"' && mode == Mode::JSON){
             skipString(input, i);
             continue;
         }
 
         if (isOpen(c, mode))
-        {
             stck.push({c, i});
-        }
-        else if (isClose(c, mode))
-        {
+        else if (isClose(c, mode)){
             if (stck.empty())
             {
                 result.valid = false;
@@ -80,8 +73,7 @@ CheckResult SyntaxChecker::check(const std::string &input, Mode mode)
         }
     }
 
-    while (!stck.empty())
-    {
+    while (!stck.empty()){
         Frame f = stck.top();
         stck.pop();
         result.valid = false;
