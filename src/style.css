@@ -1,0 +1,26 @@
+main {
+    display: flex;
+    min-height: 80vh; 
+}
+
+#editor-pane {
+    width: 60%;
+    background-color: #1e1e1e;
+}
+
+#error-pane {
+    width: 40%;
+    background-color: #2d2d2d;
+    border-left: 2px solid #555;
+}
+
+#mode-selector {
+    margin-top: 10px;
+    margin-bottom: 20px;
+}
+
+button {
+    margin-right: 5px;
+    padding: 5px 10px;
+    cursor: pointer;
+}
