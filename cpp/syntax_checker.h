@@ -20,9 +20,9 @@ struct Error
 {
     std::string type;
     int pos;
-    char got;      // الحرف اللي لقيناه
-    char expected; // الحرف اللي كان المفروض نلاقيه
-    int pairedPos; // مكان قوس الفتح المتعلق بالمشكلة
+    char got; 
+    char expected; 
+    int pairedPos; 
 };
 
 struct CheckResult
