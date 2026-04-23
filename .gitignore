@@ -22,3 +22,8 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+node_modules/
+emsdk/
+.DS_Store
+dist/
+public/hello.*
