@@ -80,6 +80,8 @@ export function createEditor(parent, onChange) {
         parent,
     });
 
+    view.dom.cmView = view;
+
     view.dispatch({
         changes: { 
             from: 0, 
