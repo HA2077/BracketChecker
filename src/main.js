@@ -1,12 +1,11 @@
 import { initChecker, check } from './checker-bridge.js';
-import { createEditor }       from './editor.js';
-import { renderErrors }       from './error-panel.js';
+import { createEditor, applyErrorDecorations } from './editor.js';
+import { renderErrors } from './error-panel.js';
 
 await initChecker();
 
 let debounceTimer;
-
-createEditor(document.getElementById('editor-pane'), (input) => {
+let editorView = createEditor(document.getElementById('editor-pane'), (input) => {
     clearTimeout(debounceTimer);
     
     debounceTimer = setTimeout(() => {
@@ -15,6 +14,10 @@ createEditor(document.getElementById('editor-pane'), (input) => {
         
         console.log("Syntax Errors:", result.errors);
         renderErrors(result.errors);
+        
+        if (editorView)
+            applyErrorDecorations(editorView, result.errors);
+        
         updateStatusBadge(result.valid, result.errors.length);
     }, 150);
 });

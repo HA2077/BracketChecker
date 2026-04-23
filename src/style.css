@@ -24,3 +24,47 @@ button {
     padding: 5px 10px;
     cursor: pointer;
 }
+
+#status-badge {
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 14px;
+    font-weight: bold;
+}
+
+.badge-ok {
+    background-color: #4CAF50;
+    color: white;
+}
+
+.badge-err {
+    background-color: #E24B4A;
+    color: white;
+}
+
+.cm-mismatch {
+    background: #FCEBEB;
+    border-bottom: 1.5px wavy #E24B4A;
+}
+
+.cm-unclosed {
+    background: #FAEEDA;
+    border-bottom: 1.5px wavy #EF9F27;
+}
+
+.cm-unexpected {
+    background: #FAEEDA;
+    border-bottom: 1.5px wavy #EF9F27;
+}
+
+.cm-open-pair {
+    background: #E1F5EE;
+}
+
+.cm-editor {
+    height: 100%;
+}
+
+.cm-scroller {
+    overflow: auto;
+}
