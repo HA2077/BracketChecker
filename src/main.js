@@ -18,7 +18,10 @@ function initEditor() {
         clearTimeout(debounceTimer);
         
         debounceTimer = setTimeout(() => {
+            hideWelcome();
             const mode = getActiveMode();
+            if (mode === 'HTML') return;
+
             const result = check(input, mode);
             
             renderErrors(result.errors, input);
@@ -56,8 +59,9 @@ function updateStatusBadge(valid, count) {
 function runCheck() {
     const input = editorView ? editorView.state.doc.toString() : '';
     const mode = getActiveMode();
-    
+    const appMain = document.querySelector('.app-main');
     if (mode === 'HTML') {
+        appMain.classList.add('html-mode');
         renderHtmlComingSoon();
         clearArcs(document.getElementById('editor-pane'));
         updateStatusBadge(false, 0);
@@ -65,7 +69,7 @@ function runCheck() {
         document.getElementById('status-badge').className = 'status-badge';
         return;
     }
-    
+    appMain.classList.remove('html-mode');
     if (input) {
         const result = check(input, mode);
         
@@ -81,10 +85,11 @@ function runCheck() {
         }
         
         updateStatusBadge(result.valid, result.errors.length);
-    } else {
+    }else {
         renderErrors([], '');
         if (editorView) clearArcs(editorView.dom);
-        updateStatusBadge(true, 0);
+        document.getElementById('status-badge').textContent = '';
+        document.getElementById('status-badge').className = 'status-badge';
     }
 }
 
@@ -103,7 +108,7 @@ document.querySelectorAll('.mode-btn').forEach(btn => {
     btn.addEventListener('click', (e) => {
         document.querySelectorAll('.mode-btn').forEach(b => b.classList.remove('active'));
         e.target.classList.add('active');
-        
+        document.getElementById('sample-selector').value = '';
         const mode = e.target.dataset.mode;
         
         if (mode === 'JSON' || mode === 'MATH') {
@@ -153,3 +158,23 @@ document.getElementById('sample-selector').addEventListener('change', (e) => {
     runCheck();
     
 });
+// Welcome Screen Logic
+// ========================================
+const welcomeScreen = document.getElementById('welcome-screen');
+
+export function hideWelcome() {
+    if (welcomeScreen && !welcomeScreen.classList.contains('hidden')) {
+        welcomeScreen.classList.add('hidden');
+    }
+}
+
+welcomeScreen.addEventListener('click', () => {
+    hideWelcome();
+    if (editorView) editorView.focus();
+});
+
+document.querySelectorAll('.mode-btn').forEach(btn => {
+    btn.addEventListener('click', hideWelcome);
+});
+
+document.getElementById('sample-selector').addEventListener('change', hideWelcome);

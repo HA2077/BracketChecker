@@ -65,15 +65,16 @@ html, body {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    height: 64px;
-    padding: 0 var(--space-lg);
+    min-height: 64px;
+    padding: 10px var(--space-lg);
     background: var(--bg-panel);
     border-bottom: 1px solid var(--border-subtle);
     position: sticky;
     top: 0;
     z-index: 100;
+    flex-wrap: wrap;
+    gap: 10px;
 }
-
 .header-left {
     display: flex;
     align-items: center;
@@ -97,6 +98,8 @@ html, body {
     display: flex;
     align-items: center;
     justify-content: center;
+    flex-wrap: wrap;
+    gap: 10px;
 }
 
 .header-right {
@@ -151,6 +154,7 @@ html, body {
     color: var(--text-secondary);
     cursor: pointer;
     transition: all 150ms ease;
+    white-space: nowrap;
 }
 
 .mode-btn:hover {
@@ -304,7 +308,70 @@ html, body {
     height: 100%;
     width: 100%;
 }
+/* ========================================
+   Welcome Screen
+   ======================================== */
+.welcome-screen {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: var(--bg-main);
+    z-index: 50;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    transition: opacity 300ms ease, visibility 300ms ease;
+    cursor: pointer;
+}
 
+.welcome-screen.hidden {
+    opacity: 0;
+    visibility: hidden;
+}
+
+.welcome-logo {
+    width: 120px;
+    margin-bottom: var(--space-lg);
+    animation: float 3s ease-in-out infinite;
+}
+
+.welcome-screen h2 {
+    font-size: 2rem;
+    margin-bottom: var(--space-sm);
+    color: var(--text-primary);
+}
+
+.welcome-screen p {
+    font-size: 1.1rem;
+    color: var(--text-secondary);
+}
+
+@keyframes float {
+
+    0%,
+    100% {
+        transform: translateY(0);
+    }
+
+    50% {
+        transform: translateY(-15px);
+    }
+}
+/* ========================================
+   HTML Mode Override
+   ======================================== */
+.app-main.html-mode .editor-panel {
+    display: none;
+}
+
+.app-main.html-mode .error-panel {
+    flex: 1 1 100%;
+    border-left: none;
+}
 /* ========================================
    Error Panel Styling
    ======================================== */
@@ -557,62 +624,90 @@ html, body {
 }
 
 /* ========================================
-   Responsive Design
+   Responsive Design (Mobile & Tablet)
    ======================================== */
 
-@media (max-width: 900px) {
-    .app-main {
-        flex-direction: column;
-    }
-    
-    .editor-panel,
-    .error-panel {
-        flex: none;
-        width: 100%;
-    }
-    
-    .editor-panel {
-        height: 50vh;
-    }
-    
-    .error-panel {
-        height: auto;
-        max-height: 50vh;
-        border-left: none;
-        border-top: 2px solid var(--border-divider);
-    }
-    
+@media (max-width: 950px) {
     .header-left .app-title {
-        display: none;
+        font-size: 1.1rem;
     }
 }
 
-@media (max-width: 600px) {
+@media (max-width: 650px) {
+    body {
+        display: flex;
+        flex-direction: column;
+    }
+
     .app-header {
-        padding: 0 var(--space-md);
+        height: auto; 
+        flex-direction: row; 
+        flex-wrap: wrap;     
+        padding: 12px;
+        gap: 12px;
+        justify-content: space-between; 
+    }
+
+    .header-left {
+        order: 1;
+        gap: 8px;
     }
     
-    .mode-btn {
-        padding: var(--space-xs) var(--space-sm);
-        font-size: 0.8rem;
+    .header-left .app-title {
+        display: block; 
+        font-size: 1rem;
+    }
+
+    .header-right {
+        display: flex;
+        order: 2;
+        min-width: auto;
     }
     
-    .error-panel {
-        display: none;
+    .github-link {
+        padding: 4px 8px; 
+        font-size: 0.75rem;
     }
-    
-    .error-panel.show {
-        display: block;
-        position: fixed;
-        bottom: 48px;
-        left: 0;
-        right: 0;
-        max-height: 60vh;
-        z-index: 50;
+
+    .header-center {
+        order: 3;
+        flex-direction: column;
+        width: 100%;
+        gap: 10px;
     }
-    
+
+    .mode-selector {
+        flex-wrap: wrap;
+        justify-content: center;
+        width: 100%;
+    }
+
+    .sample-selector {
+        margin-left: 0;
+        width: 100%;
+    }
+
+    .app-main {
+        height: auto;
+        flex: 1; 
+        flex-direction: column;
+    }
+
     .editor-panel {
-        height: calc(100vh - 64px - 48px);
+        flex: none;
+        width: 100%;
+        height: 45%; 
+    }
+
+    .error-panel {
+        flex: none;
+        width: 100%;
+        height: 55%; 
+        border-left: none;
+        border-top: 2px solid var(--border-divider);
+        display: block !important; 
+        position: relative;
+        max-height: none;
     }
 }
 

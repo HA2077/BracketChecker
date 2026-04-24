@@ -61,6 +61,16 @@ export function renderErrors(errors, input) {
     const pane = document.getElementById('error-pane');
     pane.innerHTML = '';
  
+    if (!input || input.trim() === '') {
+        pane.innerHTML = `
+            <div class="coming-soon">
+                <div class="coming-soon-icon" style="font-size: 2.5rem; opacity: 0.5;">⌨️</div>
+                <p style="font-size: 1.05rem; color: var(--text-muted); margin-top: 10px;">Waiting for input... Start typing!</p>
+            </div>
+        `;
+        return;
+    }
+
     if (!errors || errors.length === 0) {
         pane.innerHTML = '<p class="no-errors">✓ No errors found</p>';
         return;
