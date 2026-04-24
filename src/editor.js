@@ -82,10 +82,10 @@ export function createEditor(parent, onChange) {
 
     view.dom.cmView = view;
 
-    view.dispatch({
+view.dispatch({
         changes: { 
             from: 0, 
-            insert: '{\n  "name": "Ali",\n  "scores": [ 88, 92 \n}' 
+            insert: '' 
         }
     });
 
