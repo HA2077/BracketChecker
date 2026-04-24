@@ -68,3 +68,66 @@ button {
 .cm-scroller {
     overflow: auto;
 }
+#error-pane {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-top: 20px;
+}
+
+.error-item {
+    display: flex;
+    background-color: #2b2b2b;
+    border-radius: 6px;
+    padding: 15px;
+    border-left: 5px solid;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+    font-family: monospace;
+    color: #e0e0e0;
+}
+
+.error-item.mismatch {
+    border-left-color: #ff5555;
+}
+
+.error-item.unclosed {
+    border-left-color: #ffb86c;
+}
+
+.error-item.unexpected {
+    border-left-color: #ffb86c;
+}
+
+.err-icon {
+    font-size: 1.8em;
+    font-weight: bold;
+    margin-right: 15px;
+    display: flex;
+    align-items: center;
+}
+
+.error-item.mismatch .err-icon {
+    color: #ff5555;
+}
+
+.error-item.unclosed .err-icon,
+.error-item.unexpected .err-icon {
+    color: #ffb86c;
+}
+
+.err-body p {
+    margin: 5px 0;
+}
+
+.err-title {
+    font-weight: bold;
+    font-size: 1.1em;
+    color: #ffffff;
+}
+
+.no-errors {
+    color: #50fa7b;
+    font-weight: bold;
+    padding: 10px;
+    font-size: 1.1em;
+}

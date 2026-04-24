@@ -14,7 +14,7 @@ let editorView = createEditor(document.getElementById('editor-pane'), (input) =>
         const result = check(input, mode);
         
         console.log("Syntax Errors:", result.errors);
-        renderErrors(result.errors);
+        renderErrors(result.errors, input);
         
         if (editorView) {
             applyErrorDecorations(editorView, result.errors);
