@@ -1,4 +1,4 @@
-# Syntax Error Pinpointer
+# Bracket Checker
 > Data Structures Course Project · C++ / WebAssembly / Web
 
 **A live bracket & syntax validator that tells you _exactly_ where your code breaks — and why.**  
@@ -19,7 +19,6 @@ Not just "error on line 12." It says: `) at position 47 cannot close [ opened at
 9. [Feature List](#9-feature-list)
 10. [Build Roadmap & Task Assignments](#10-build-roadmap--task-assignments)
 11. [How to Run Locally](#11-how-to-run-locally)
-12. [AI Agent Context](#12-ai-agent-context)
 
 ---
 
@@ -147,7 +146,7 @@ The C++ core has **zero knowledge of the browser**. It takes a string, returns a
 ## 5. File Structure
 
 ```
-syntax-pinpointer/
+BracketChecker/
 │
 ├── cpp/
 │   ├── syntax_checker.h        ← SyntaxChecker class declaration
@@ -167,7 +166,7 @@ syntax-pinpointer/
 │
 ├── index.html                  ← single page shell
 ├── vite.config.js              ← Vite config (serves .wasm correctly)
-├── compile.sh                  ← one-command Emscripten build script
+├── WAcompile.sh                ← one-command Emscripten build script
 └── README.md
 ```
 
@@ -341,7 +340,7 @@ EMSCRIPTEN_BINDINGS(checker_module) {
 
 ## 7. WebAssembly Integration
 
-### Compile command (`compile.sh`)
+### Compile command (`WAcompile.sh`)
 
 ```bash
 #!/bin/bash
@@ -359,7 +358,7 @@ echo "Build complete → public/checker.js + public/checker.wasm"
 
 Run once after any C++ change:
 ```bash
-chmod +x compile.sh && ./compile.sh
+chmod +x WAcompile.sh && ./WAcompile.sh
 ```
 
 ### `checker-bridge.js` — JS side of the bridge
@@ -517,23 +516,23 @@ export function drawArc(editorDom, fromPos, toPos, color = '#E24B4A') {
 
 ### STEP 1 — Foundation (everyone together)
 
-- [ ] Set up repo
-- [ ] Install Emscripten SDK locally (`emsdk install latest`)
-- [ ] Scaffold Vite project (`npm create vite@latest`)
-- [ ] Verify WASM pipeline end-to-end with a hello-world `.cpp` before touching real logic
+- [x] Set up repo
+- [x] Install Emscripten SDK locally (`emsdk install latest`)
+- [x] Scaffold Vite project (`npm create vite@latest`)
+- [x] Verify WASM pipeline end-to-end with a hello-world `.cpp` before touching real logic
 
 ---
 
 ### Track A — C++ Core
 > **Files:** `cpp/syntax_checker.h`, `cpp/syntax_checker.cpp`, `cpp/bindings.cpp`
 
-- [ ] **A1** — Implement `Frame` struct and `CheckResult` struct
-- [ ] **A2** — Implement `SyntaxChecker::check()` for JSON mode (curly + square + round brackets)
-- [ ] **A3** — Handle string skipping (brackets inside `"quotes"` must be ignored)
-- [ ] **A4** — Return all 3 error types: `mismatch`, `unclosed`, `unexpected`
-- [ ] **A5** — Write `bindings.cpp` and verify it compiles with `emcc --bind`
-- [ ] **A6** — Write `compile.sh` and confirm `checker.wasm` is produced
-- [ ] **A7 (stretch)** — Extend `check()` to support MATH mode (same brackets, no string skipping)
+- [x] **A1** — Implement `Frame` struct and `CheckResult` struct
+- [x] **A2** — Implement `SyntaxChecker::check()` for JSON mode (curly + square + round brackets)
+- [x] **A3** — Handle string skipping (brackets inside `"quotes"` must be ignored)
+- [x] **A4** — Return all 3 error types: `mismatch`, `unclosed`, `unexpected`
+- [x] **A5** — Write `bindings.cpp` and verify it compiles with `emcc --bind`
+- [x] **A6** — Write `compile.sh` and confirm `checker.wasm` is produced
+- [x] **A7 (stretch)** — Extend `check()` to support MATH mode (same brackets, no string skipping)
 
 **Test inputs to verify A2–A4:**
 ```
@@ -548,12 +547,12 @@ Unexpected: "a": 1, 2 }
 ### Track B — WASM Bridge + App Shell 
 > **Files:** `src/checker-bridge.js`, `src/main.js`, `index.html`, `vite.config.js`
 
-- [ ] **B1** — Set up Vite config to serve `.wasm` files correctly (requires `optimizeDeps` exclusion)
-- [ ] **B2** — Implement `checker-bridge.js` — `initChecker()` and `check()` functions (see §7)
-- [ ] **B3** — Build `index.html` shell — two-panel layout: editor left, error panel right
-- [ ] **B4** — Wire up debounced `onChange` → `check()` → pass errors to UI (150ms debounce)
-- [ ] **B5** — Console-log raw error objects first to confirm WASM bridge is working end-to-end
-- [ ] **B6 (stretch)** — Add mode selector (JSON / HTML / Math) that re-runs the check
+- [x] **B1** — Set up Vite config to serve `.wasm` files correctly (requires `optimizeDeps` exclusion)
+- [x] **B2** — Implement `checker-bridge.js` — `initChecker()` and `check()` functions (see §7)
+- [x] **B3** — Build `index.html` shell — two-panel layout: editor left, error panel right
+- [x] **B4** — Wire up debounced `onChange` → `check()` → pass errors to UI (150ms debounce)
+- [x] **B5** — Console-log raw error objects first to confirm WASM bridge is working end-to-end
+- [x] **B6 (stretch)** — Add mode selector (JSON / HTML / Math) that re-runs the check
 
 **Vite config note:**
 ```js
@@ -574,23 +573,23 @@ export default {
 ### Track C — Editor + Visual Layer
 > **Files:** `src/editor.js`, `src/arc-overlay.js`, `src/error-panel.js`
 
-- [ ] **C1** — Set up CodeMirror 6 editor in `editor.js` with `basicSetup`
-- [ ] **C2** — Implement error highlight decorations: red underline for mismatch, amber for unclosed
-- [ ] **C3** — Highlight the matching open bracket in green when an error is active
-- [ ] **C4** — Implement `arc-overlay.js` — SVG arc drawn between opener and bad closer
-- [ ] **C5** — Build `error-panel.js` — renders list of errors with type, position, and suggestion
-- [ ] **C6** — Show the stack state inside each error card (the frames that were on the stack when the error fired)
-- [ ] **C7 (stretch)** — Animate the arc appearing (CSS transition on `stroke-dashoffset`)
+- [x] **C1** — Set up CodeMirror 6 editor in `editor.js` with `basicSetup`
+- [x] **C2** — Implement error highlight decorations: red underline for mismatch, amber for unclosed
+- [x] **C3** — Highlight the matching open bracket in green when an error is active
+- [x] **C4** — Implement `arc-overlay.js` — SVG arc drawn between opener and bad closer
+- [x] **C5** — Build `error-panel.js` — renders list of errors with type, position, and suggestion
+- [x] **C6** — Show the stack state inside each error card (the frames that were on the stack when the error fired)
+- [x] **C7 (stretch)** — Animate the arc appearing (CSS transition on `stroke-dashoffset`)
 
 ---
 
 ### Integration Week — Merge + Polish
 
-- [ ] Merge Track A + B: C++ output feeding real checks
-- [ ] Merge Track B + C: errors rendering in the editor
-- [ ] End-to-end test with all 3 error types visible simultaneously
-- [ ] Add sample inputs dropdown (broken JSON, broken HTML, broken math)
-- [ ] Record a 1-min demo screencast for the presentation
+- [x] Merge Track A + B: C++ output feeding real checks
+- [x] Merge Track B + C: errors rendering in the editor
+- [x] End-to-end test with all 3 error types visible simultaneously
+- [x] Add sample inputs dropdown (broken JSON, broken HTML, broken math)
+- [x] Record a 1-min demo screencast for the presentation
 
 ---
 
@@ -612,7 +611,7 @@ source ./emsdk_env.sh
 
 ```bash
 git clone <your-repo>
-cd syntax-pinpointer
+cd BracketChecker
 npm install
 ```
 
@@ -634,57 +633,6 @@ npm run dev
 
 ```bash
 ./compile.sh && npm run dev
-```
-
----
-
-## 12. AI Agent Context
-
-> This section is for feeding to an AI coding agent (Claude, Cursor, Copilot etc.) to get working code fast. Copy the relevant block and paste it as your prompt prefix.
-
----
-
-### Context block for Track A (C++ core)
-
-```
-You are helping build the C++ core of a syntax error detection tool called Syntax Error Pinpointer.
-The data structure is a std::stack<Frame> where Frame = { char ch, int pos }.
-The main function is SyntaxChecker::check(string input, Mode mode) → CheckResult.
-CheckResult contains: bool valid, vector<Error> errors.
-Error types: "mismatch" (wrong closer), "unclosed" (never closed), "unexpected" (closer with empty stack).
-The code will be compiled to WebAssembly using Emscripten --bind.
-See syntax_checker.h for the full type definitions.
-Do NOT use any browser or OS APIs — pure C++17 only.
-```
-
----
-
-### Context block for Track B (WASM bridge)
-
-```
-You are helping build the JavaScript WASM bridge for a syntax checker tool.
-The WASM module is loaded via: import CheckerModule from '../public/checker.js'
-After init: const checker = new Module.SyntaxChecker()
-Call: checker.check(inputString, Module.Mode.JSON) → returns CheckResult
-CheckResult.errors is a WASM vector — iterate with .size() and .get(i).
-Each error has: { type, pos, got, expected, pairedPos } — convert to plain JS objects.
-The bridge exports: initChecker() and check(input, mode).
-Do NOT put any UI logic in the bridge — it only translates between WASM and plain JS.
-```
-
----
-
-### Context block for Track C (Frontend / Editor)
-
-```
-You are helping build the editor UI for a syntax error highlighting tool.
-The editor uses CodeMirror 6. Errors arrive as an array of:
-{ type: "mismatch"|"unclosed"|"unexpected", pos: number, got: char, expected: char, pairedPos: number }
-For each error: underline the character at .pos in red (mismatch) or amber (unclosed/unexpected).
-For mismatch errors: also highlight the character at .pairedPos in green, and draw an SVG arc between them.
-The error panel lists each error with: type badge, position, message, and stack state.
-Use CSS classes cm-mismatch, cm-unclosed, cm-open-pair for the CodeMirror decorations.
-Do NOT do any bracket-checking logic in JS — all detection comes from the WASM module.
 ```
 
 ---
