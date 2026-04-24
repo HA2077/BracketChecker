@@ -195,7 +195,53 @@ html, body {
     0%, 100% { transform: scale(1); }
     50% { transform: scale(1.05); }
 }
+/* ========================================
+   Sample Selector (Dropdown)
+   ======================================== */
+.sample-selector {
+    color-scheme: dark;
+    background: var(--bg-elevated);
+    color: var(--text-primary);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-sm);
+    padding: var(--space-sm) var(--space-md);
+    font-family: var(--font-primary);
+    font-size: 0.85rem;
+    margin-left: var(--space-md);
+    cursor: pointer;
+    outline: none;
+    transition: all 150ms ease;
+    appearance: none;
+    background-image: url("data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%238b949e%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E");
+    background-repeat: no-repeat;
+    background-position: right 0.7rem top 50%;
+    background-size: 0.65rem auto;
+    padding-right: 2rem;
+}
 
+.sample-selector:hover {
+    border-color: var(--text-muted);
+}
+
+.sample-selector:focus {
+    border-color: var(--accent-green);
+}
+
+.sample-selector optgroup {
+    background: var(--bg-panel);
+    color: var(--text-muted);
+    font-weight: 600;
+}
+
+.sample-selector option {
+    background: var(--bg-editor);
+    color: var(--text-primary);
+}
+.sample-selector option:checked,
+.sample-selector option:hover {
+    background-color: var(--accent-green-subtle) !important;
+    color: #ffffff;
+}
 /* ========================================
    Main Content
    ======================================== */

@@ -24,6 +24,20 @@
                 <button class="mode-btn" data-mode="MATH">Math</button>
                 <span id="status-badge" class="status-badge"></span>
             </div>
+            <select id="sample-selector" class="sample-selector">
+                <option value="" disabled selected>Load Example...</option>
+                <optgroup label="JSON Errors">
+                    <option value="valid_json">Valid JSON</option>
+                    <option value="mismatch">Mismatch</option>
+                    <option value="unclosed">Unclosed</option>
+                    <option value="unexpected">Unexpected</option>
+                    <option value="multiple">Multiple errors</option>
+                </optgroup>
+                <optgroup label="Math Errors">
+                    <option value="valid_math">Valid math</option>
+                    <option value="broken_math">Broken math</option>
+                </optgroup>
+            </select>
         </div>
         
         <div class="header-right">

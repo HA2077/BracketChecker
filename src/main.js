@@ -118,3 +118,38 @@ document.querySelectorAll('.mode-btn').forEach(btn => {
 });
 
 editorView.focus();
+// ========================================
+// Sample Loader Logic 
+// ========================================
+const SAMPLES = {
+    'valid_json': { mode: 'JSON', text: '{ "user": { "name": "Ali", \n"scores": [88, 92, 100] } }' },
+    'mismatch': { mode: 'JSON', text: '{ "scores": [ 88, 92 ) }' },
+    'unclosed': { mode: 'JSON', text: '{ "name": "Ali", "scores": [88, 92' },
+    'unexpected': { mode: 'JSON', text: '"name": "Ali" }' },
+    'multiple': { mode: 'JSON', text: '{ [ ( ] ) }' },
+    'valid_math': { mode: 'MATH', text: '(3 + [2 * (1 + 4)])' },
+    'broken_math': { mode: 'MATH', text: '(3 * [2 + 1 )' }
+};
+
+document.getElementById('sample-selector').addEventListener('change', (e) => {
+    const sampleKey = e.target.value;
+    if (!sampleKey || !SAMPLES[sampleKey]) return;
+    
+    const sample = SAMPLES[sampleKey];
+    
+    // Switch to the correct mode button automatically
+    document.querySelectorAll('.mode-btn').forEach(b => b.classList.remove('active'));
+    document.querySelector(`.mode-btn[data-mode="${sample.mode}"]`).classList.add('active');
+    
+    // Inject the code into CodeMirror
+    if (editorView) {
+        editorView.dispatch({
+            changes: { from: 0, to: editorView.state.doc.length, insert: sample.text }
+        });
+        editorView.focus();
+    }
+    
+    // Force a check immediately
+    runCheck();
+    
+});
