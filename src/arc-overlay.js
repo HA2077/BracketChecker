@@ -1,58 +1,73 @@
 export function drawArc(editorDom, fromPos, toPos, color = '#E24B4A') {
     const view = editorDom.cmView;
-    if (!view || typeof view.coordsAtPos !== 'function') {
+    if (!view || typeof view.coordsAtPos !== 'function')
         return null;
-    }
 
     const fromCoords = view.coordsAtPos(fromPos);
     const toCoords = view.coordsAtPos(toPos);
     
-    if (!fromCoords || !toCoords) {
+    if (!fromCoords || !toCoords)
         return null;
-    }
 
-    const editorRect = editorDom.getBoundingClientRect();
+    const scrollDOM = view.scrollDOM;
+    if (!scrollDOM) return null;
     
-    const fx = fromCoords.left - editorRect.left;
-    const fy = fromCoords.top - editorRect.top;
-    const tx = toCoords.left - editorRect.left;
-    const ty = toCoords.top - editorRect.top;
+    if (getComputedStyle(scrollDOM).position === 'static')
+        scrollDOM.style.position = 'relative';
+    
+    const scrollRect = scrollDOM.getBoundingClientRect();
+
+    const fx = fromCoords.left - scrollRect.left + scrollDOM.scrollLeft;
+    const fy = fromCoords.top - scrollRect.top + scrollDOM.scrollTop;
+    const tx = toCoords.left - scrollRect.left + scrollDOM.scrollLeft;
+    const ty = toCoords.top - scrollRect.top + scrollDOM.scrollTop;
 
     const midX = (fx + tx) / 2;
-    const midY = Math.max(fy, ty) + 30;
+    
+    const dx = Math.abs(tx - fx);
+    const midY = Math.max(fy, ty) + Math.max(40, Math.min(dx * 0.05, 5000));
 
     const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
     path.setAttribute('d', `M${fx},${fy} Q${midX},${midY} ${tx},${ty}`);
     path.setAttribute('fill', 'none');
     path.setAttribute('stroke', color);
     path.setAttribute('stroke-width', '2');
-    path.setAttribute('stroke-dasharray', '4 3');
+    path.setAttribute('stroke-dasharray', '200');
+    path.setAttribute('stroke-dashoffset', '200');
+    path.classList.add('arc-animated');
 
     return path;
 }
 
-export function drawMultiArcs(editorDom, errors) {
+export function drawMultiArcs(editorDom, errors){
     clearArcs(editorDom);
     
-    let svg = null;
+    const view = editorDom.cmView;
+    if (!view) return;
     
-    for (const err of errors) {
-        if (err.type === 'mismatch' && err.pairedPos >= 0) {
+    const scrollDOM = view.scrollDOM;
+    if (!scrollDOM) return;
+    
+    if (getComputedStyle(scrollDOM).position === 'static')
+        scrollDOM.style.position = 'relative';
+    
+    const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+    svg.style.cssText = 'position:absolute;top:0;left:0;width:100%;pointer-events:none;overflow:visible;z-index:10;';
+    svg.style.height = scrollDOM.scrollHeight + 'px';
+    svg.dataset.arcOverlay = 'true';
+    scrollDOM.appendChild(svg);
+    
+    for (const err of errors){
+        if (err.type === 'mismatch' && err.pairedPos >= 0){
             const path = drawArc(editorDom, err.pairedPos, err.pos);
-            if (path) {
-                if (!svg) {
-                    svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
-                    svg.style.cssText = 'position:absolute;top:0;left:0;width:100%;height:100%;pointer-events:none;overflow:visible';
-                    svg.dataset.arcOverlay = 'true';
-                    editorDom.style.position = 'relative';
-                    editorDom.appendChild(svg);
-                }
+            if (path)
                 svg.appendChild(path);
-            }
         }
     }
 }
 
 export function clearArcs(editorDom) {
-    editorDom.querySelectorAll('[data-arc-overlay]').forEach(el => el.remove());
+    const view = editorDom.cmView;
+    if (view && view.scrollDOM)
+        view.scrollDOM.querySelectorAll('[data-arc-overlay]').forEach(el => el.remove());
 }

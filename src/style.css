@@ -624,3 +624,12 @@ html, body {
     z-index: 10;
     pointer-events: none;
 }
+
+@keyframes drawArc {
+    from { stroke-dashoffset: 200; }
+    to   { stroke-dashoffset: 0; }
+}
+
+.arc-animated {
+    animation: drawArc 0.35s ease-out forwards;
+}
