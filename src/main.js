@@ -29,11 +29,11 @@ function initEditor() {
             if (editorView && result.errors.length > 0) {
                 applyErrorDecorations(editorView, result.errors);
                 drawMultiArcs(editorView.dom, result.errors);
-            } else if (editorView) {
+            } else if (editorView)
                 clearArcs(editorView.dom);
-            }
             
             updateStatusBadge(result.valid, result.errors.length);
+            updateTabTitle(result.valid, result.errors.length);
         }, 150);
     });
 }
@@ -54,6 +54,13 @@ function updateStatusBadge(valid, count) {
         badge.textContent = `${count} error${count > 1 ? 's' : ''}`;
         badge.className = 'status-badge badge-err';
     }
+}
+
+function updateTabTitle(valid, errorCount){
+    if (valid)
+        document.title = 'Bracket Checker';
+    else
+        document.title = `(${errorCount}) Bracket Checker`;
 }
 
 function runCheck() {
@@ -85,15 +92,18 @@ function runCheck() {
         }
         
         updateStatusBadge(result.valid, result.errors.length);
-    }else {
+        updateTabTitle(result.valid, result.errors.length);
+    } 
+    else{
         renderErrors([], '');
         if (editorView) clearArcs(editorView.dom);
         document.getElementById('status-badge').textContent = '';
         document.getElementById('status-badge').className = 'status-badge';
+        document.title = 'Bracket Checker';
     }
 }
 
-function renderHtmlComingSoon() {
+function renderHtmlComingSoon(){
     const pane = document.getElementById('error-pane');
     pane.innerHTML = `
         <div class="coming-soon">
@@ -123,9 +133,8 @@ document.querySelectorAll('.mode-btn').forEach(btn => {
 });
 
 editorView.focus();
-// ========================================
-// Sample Loader Logic 
-// ========================================
+
+
 const SAMPLES = {
     'valid_json': { mode: 'JSON', text: '{ "user": { "name": "Ali", \n"scores": [88, 92, 100] } }' },
     'mismatch': { mode: 'JSON', text: '{ "scores": [ 88, 92 ) }' },
@@ -158,8 +167,8 @@ document.getElementById('sample-selector').addEventListener('change', (e) => {
     runCheck();
     
 });
-// Welcome Screen Logic
-// ========================================
+
+
 const welcomeScreen = document.getElementById('welcome-screen');
 
 export function hideWelcome() {
