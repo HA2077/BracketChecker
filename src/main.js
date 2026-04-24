@@ -1,7 +1,7 @@
 import { initChecker, check } from './checker-bridge.js';
 import { createEditor, applyErrorDecorations } from './editor.js';
 import { renderErrors } from './error-panel.js';
-import { drawArc, clearArcs } from './arc-overlay.js';
+import { drawMultiArcs, clearArcs } from './arc-overlay.js';
 
 await initChecker();
 
@@ -18,23 +18,12 @@ let editorView = createEditor(document.getElementById('editor-pane'), (input) =>
         
         if (editorView) {
             applyErrorDecorations(editorView, result.errors);
-            drawArcsForErrors(editorView, result.errors);
+            drawMultiArcs(editorView.dom, result.errors);
         }
         
         updateStatusBadge(result.valid, result.errors.length);
     }, 150);
 });
-
-function drawArcsForErrors(view, errors) {
-    const editorDom = view.dom;
-    clearArcs(editorDom);
-    
-    for (const err of errors) {
-        if (err.type === 'mismatch' && err.pairedPos >= 0) {
-            drawArc(editorDom, err.pairedPos, err.pos);
-        }
-    }
-}
 
 function updateStatusBadge(valid, count) {
     const badge = document.getElementById('status-badge');
