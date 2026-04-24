@@ -2,22 +2,46 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Bracket Checker</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="/src/style.css">
     <link rel="icon" type="image/svg+xml" href="./assets/Project_Logo.svg"/>
 </head>
 <body>
-    <header>
-        <h1>Bracket Checker</h1>
-        <div id="mode-selector">
-            <button class="mode active" data-mode="JSON">JSON</button>
-            <button class="mode" data-mode="MATH">Math</button>
-            <button class="mode" data-mode="HTML">HTML</button>
+    <header class="app-header">
+        <div class="header-left">
+            <img src="./assets/Project_Logo.svg" alt="Logo" class="app-logo">
+            <h1 class="app-title">Bracket Checker</h1>
         </div>
-        <span id="status-badge"></span> </header>
+        
+        <div class="header-center">
+            <div id="mode-selector" class="mode-selector">
+                <button class="mode-btn active" data-mode="JSON">JSON</button>
+                <button class="mode-btn" data-mode="HTML">HTML</button>
+                <button class="mode-btn" data-mode="MATH">Math</button>
+            </div>
+        </div>
+        
+        <div class="header-right">
+            <span id="status-badge" class="status-badge"></span>
+        </div>
+    </header>
 
-    <main>
-        <div id="editor-pane"></div>   <div id="error-pane"></div>    </main>
+    <main class="app-main">
+        <div class="editor-panel">
+            <div id="editor-pane"></div>
+        </div>
+        <div class="error-panel">
+            <div id="error-pane"></div>
+        </div>
+    </main>
+
+    <footer class="app-footer">
+        <p class="footer-text">Made with ❤️ from HA AA AF ZW SM © 2026</p>
+    </footer>
 
     <script type="module" src="/src/main.js"></script>
 </body>
