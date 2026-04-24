@@ -1,19 +1,76 @@
-export function renderErrors(errors) {
-    const pane = document.getElementById('error-pane'); 
+function getLineCol(text, pos) {
+    let line = 1;
+    let col = 1;
+    for (let i = 0; i < pos; i++) {
+        if (text[i] === '\n') {
+            line++;
+            col = 1;
+        } else {
+            col++;
+        }
+    }
+    return `line ${line}, col ${col}`;
+}
+
+function escapeHTML(str) {
+    if (!str) return '';
+    return str.replace(/[&<>'"]/g, 
+        tag => ({
+            '&': '&amp;',
+            '<': '&lt;',
+            '>': '&gt;',
+            "'": '&#39;',
+            '"': '&quot;'
+        }[tag] || tag)
+    );
+}
+
+function formatTitle(err, locStr) {
+    if (err.type === 'mismatch') return `Mismatch at ${locStr}`;
+    if (err.type === 'unclosed') return `Unclosed bracket at ${locStr}`;
+    return `Unexpected bracket at ${locStr}`;
+}
+
+function formatMessage(err, text) {
+    const got = escapeHTML(err.got);
+    const expected = escapeHTML(err.expected);
     
+    if (err.type === 'mismatch') {
+        const openerLoc = getLineCol(text, err.pairedPos);
+        return `<strong>${got}</strong> cannot close opener from ${openerLoc}.<br>Did you mean <strong>${expected}</strong> ?`;
+    }
+    if (err.type === 'unclosed') {
+        return `Bracket <strong>${got}</strong> opened but never closed.`;
+    }
+    return `Bracket <strong>${got}</strong> found with nothing open.`;
+}
+
+export function renderErrors(errors, input) {
+    const pane = document.getElementById('error-pane');
+    pane.innerHTML = '';
+ 
     if (!errors || errors.length === 0) {
-        pane.innerHTML = '<span style="color: green;">✓ No syntax errors found.</span>';
+        pane.innerHTML = '<p class="no-errors">✓ No errors found</p>';
         return;
     }
-
-    let html = '<ul>';
+ 
+    const fragment = document.createDocumentFragment();
+ 
     errors.forEach(err => {
-        html += `<li style="color: red;">
-            <strong>Error at position ${err.pos}:</strong> 
-            Got '${err.got}', expected '${err.expected || 'matching pair'}'.
-        </li>`;
+        const locStr = getLineCol(input, err.pos);
+        
+        const card = document.createElement('div');
+        card.className = `error-item ${err.type}`;
+        
+        card.innerHTML = `
+            <div class="err-icon">${err.type === 'mismatch' ? '!' : '~'}</div>
+            <div class="err-body">
+                <p class="err-title">${formatTitle(err, locStr)}</p>
+                <p class="err-msg">${formatMessage(err, input)}</p>
+            </div>
+        `;
+        fragment.appendChild(card);
     });
-    html += '</ul>';
     
-    pane.innerHTML = html;
+    pane.appendChild(fragment);
 }
