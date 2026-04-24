@@ -1,5 +1,6 @@
 #include "syntax_checker.h"
 #include <stack>
+#include <vector>
 
 bool SyntaxChecker::isOpen(char c, Mode m){
     if (m == Mode::HTML)
@@ -38,6 +39,16 @@ void SyntaxChecker::skipString(const std::string &s, int &i){
     }
 }
 
+std::vector<Frame> stackToVector(const std::stack<Frame> &stk){
+    std::vector<Frame> frames;
+    std::stack<Frame> temp = stk;
+    while (!temp.empty()){
+        frames.push_back(temp.top());
+        temp.pop();
+    }
+    return frames;
+}
+
 CheckResult SyntaxChecker::check(const std::string &input, Mode mode){
     std::stack<Frame> stck;
     CheckResult result{true, {}};
@@ -56,7 +67,8 @@ CheckResult SyntaxChecker::check(const std::string &input, Mode mode){
             if (stck.empty())
             {
                 result.valid = false;
-                result.errors.push_back({"unexpected", i, c, 0, -1});
+                Error err{"unexpected", i, c, 0, -1, {}};
+                result.errors.push_back(err);
             }
             else
             {
@@ -66,8 +78,9 @@ CheckResult SyntaxChecker::check(const std::string &input, Mode mode){
                 if (top.ch != matchingOpen(c))
                 {
                     char needed = (top.ch == '(' ? ')' : (top.ch == '[' ? ']' : '}'));
+                    Error err{"mismatch", i, c, needed, top.pos, stackToVector(stck)};
                     result.valid = false;
-                    result.errors.push_back({"mismatch", i, c, needed, top.pos});
+                    result.errors.push_back(err);
                 }
             }
         }
@@ -76,8 +89,9 @@ CheckResult SyntaxChecker::check(const std::string &input, Mode mode){
     while (!stck.empty()){
         Frame f = stck.top();
         stck.pop();
+        Error err{"unclosed", f.pos, f.ch, 0, -1, stackToVector(stck)};
         result.valid = false;
-        result.errors.push_back({"unclosed", f.pos, f.ch, 0, -1});
+        result.errors.push_back(err);
     }
 
     return result;

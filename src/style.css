@@ -131,3 +131,35 @@ button {
     padding: 10px;
     font-size: 1.1em;
 }
+
+.err-stack {
+    margin-top: 10px;
+    padding-top: 10px;
+    border-top: 1px solid #444;
+    font-size: 0.9em;
+    color: #aaa;
+}
+
+.stack-label {
+    margin-right: 8px;
+    font-weight: bold;
+}
+
+.stack-pill {
+    display: inline-block;
+    background-color: #3a3a3a;
+    padding: 2px 8px;
+    border-radius: 4px;
+    margin-right: 4px;
+    font-size: 0.85em;
+}
+
+.stack-pill.top {
+    background-color: #4a6b4a;
+    border: 1px solid #6b8b6b;
+}
+
+.stack-empty {
+    color: #666;
+    font-style: italic;
+}

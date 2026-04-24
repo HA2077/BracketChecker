@@ -25,6 +25,18 @@ function escapeHTML(str) {
     );
 }
 
+function formatStackSnapshot(snapshot) {
+    if (!snapshot || snapshot.length === 0) {
+        return '<span class="stack-empty">empty stack</span>';
+    }
+    
+    return snapshot.map((frame, index) => {
+        const isTop = index === snapshot.length - 1;
+        const label = `L${frame.pos}`;
+        return `<span class="stack-pill ${isTop ? 'top' : ''}">${frame.ch} ${label}${isTop ? ' ← top' : ''}</span>`;
+    }).join(' ');
+}
+
 function formatTitle(err, locStr) {
     if (err.type === 'mismatch') return `Mismatch at ${locStr}`;
     if (err.type === 'unclosed') return `Unclosed bracket at ${locStr}`;
@@ -58,6 +70,7 @@ export function renderErrors(errors, input) {
  
     errors.forEach(err => {
         const locStr = getLineCol(input, err.pos);
+        const stackHtml = formatStackSnapshot(err.stackSnapshot);
         
         const card = document.createElement('div');
         card.className = `error-item ${err.type}`;
@@ -67,6 +80,10 @@ export function renderErrors(errors, input) {
             <div class="err-body">
                 <p class="err-title">${formatTitle(err, locStr)}</p>
                 <p class="err-msg">${formatMessage(err, input)}</p>
+                <p class="err-stack">
+                    <span class="stack-label">Stack:</span>
+                    ${stackHtml}
+                </p>
             </div>
         `;
         fragment.appendChild(card);

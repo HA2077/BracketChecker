@@ -30,12 +30,19 @@ export function check(input, mode = 'JSON') {
         valid: result.valid,
         errors: Array.from({ length: result.errors.size() }, (_, i) => {
             const e = result.errors.get(i);
+            const snapshot = e.stackSnapshot 
+                ? Array.from({ length: e.stackSnapshot.size() }, (_, j) => {
+                    const f = e.stackSnapshot.get(j);
+                    return { ch: String.fromCharCode(f.ch), pos: f.pos };
+                })
+                : [];
             return {
                 type: e.type,
                 pos: e.pos,
                 got: String.fromCharCode(e.got),
                 expected: e.expected ? String.fromCharCode(e.expected) : null,
                 pairedPos: e.pairedPos,
+                stackSnapshot: snapshot,
             };
         })
     };
