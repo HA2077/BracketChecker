@@ -2,12 +2,7 @@
 import { EditorView, basicSetup } from 'codemirror';
 import { Decoration, ViewPlugin } from '@codemirror/view';
 import { StateField, StateEffect } from '@codemirror/state';
-
-/**
- * Initializes CodeMirror 6 in the specified parent element.
- * @param {HTMLElement} parent - The DOM element to attach the editor to.
- * @param {Function} onChange - Callback that receives the new document text.
- */
+import { setEditorView, getCurrentErrors } from './error-state.js';
 
 export const setErrors = StateEffect.define();
 
@@ -81,10 +76,22 @@ export function createEditor(parent, onChange) {
     });
 
     view.dom.cmView = view;
+    setEditorView(view);
 
-view.dispatch({
+    view.dom.addEventListener('click', (e) => {
+        const pos = view.posAtCoords({ x: e.clientX, y: e.clientY });
+        if (pos == null) return;
+        const errors = getCurrentErrors();
+        const err = errors.find(e => e.pos === pos);
+        if (err) {
+            document.dispatchEvent(new CustomEvent('error-click', { detail: { pos: err.pos } }));
+        }
+    });
+
+    view.dispatch({
         changes: { 
             from: 0, 
+            to: view.state.doc.length, 
             insert: '' 
         }
     });

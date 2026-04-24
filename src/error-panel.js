@@ -1,18 +1,18 @@
 function getLineCol(text, pos) {
     let line = 1;
     let col = 1;
-    for (let i = 0; i < pos; i++) {
+    for (let i = 0; i < pos;++i){
         if (text[i] === '\n') {
             line++;
             col = 1;
-        } else {
+        } 
+        else
             col++;
-        }
     }
     return `line ${line}, col ${col}`;
 }
 
-function escapeHTML(str) {
+function escapeHTML(str){
     if (!str) return '';
     return str.replace(/[&<>'"]/g, 
         tag => ({
@@ -26,9 +26,8 @@ function escapeHTML(str) {
 }
 
 function formatStackSnapshot(snapshot) {
-    if (!snapshot || snapshot.length === 0) {
+    if (!snapshot || snapshot.length === 0)
         return '<span class="stack-empty">empty stack</span>';
-    }
     
     return snapshot.map((frame, index) => {
         const isTop = index === snapshot.length - 1;
@@ -51,13 +50,20 @@ function formatMessage(err, text) {
         const openerLoc = getLineCol(text, err.pairedPos);
         return `<strong>${got}</strong> cannot close opener from ${openerLoc}.<br>Did you mean <strong>${expected}</strong> ?`;
     }
-    if (err.type === 'unclosed') {
+    if (err.type === 'unclosed')
         return `Bracket <strong>${got}</strong> opened but never closed.`;
-    }
     return `Bracket <strong>${got}</strong> found with nothing open.`;
 }
 
+import { getEditorView } from './error-state.js';
+
+let _currentErrors = [];
+let _editorInput = '';
+
 export function renderErrors(errors, input) {
+    _currentErrors = errors;
+    _editorInput = input;
+    
     const pane = document.getElementById('error-pane');
     pane.innerHTML = '';
  
@@ -78,12 +84,13 @@ export function renderErrors(errors, input) {
  
     const fragment = document.createDocumentFragment();
  
-    errors.forEach(err => {
+    errors.forEach((err, index) => {
         const locStr = getLineCol(input, err.pos);
         const stackHtml = formatStackSnapshot(err.stackSnapshot);
         
         const card = document.createElement('div');
         card.className = `error-item ${err.type}`;
+        card.dataset.index = index;
         
         card.innerHTML = `
             <div class="err-icon">${err.type === 'mismatch' ? '!' : '~'}</div>
@@ -96,8 +103,33 @@ export function renderErrors(errors, input) {
                 </p>
             </div>
         `;
+        
+        card.addEventListener('click', () => {
+            const view = getEditorView();
+            if (view) {
+                view.dispatch({
+                    selection: { anchor: err.pos },
+                    scrollIntoView: true
+                });
+                view.focus();
+            }
+        });
+        
         fragment.appendChild(card);
     });
     
     pane.appendChild(fragment);
+
+    document.addEventListener('error-click', (e) => {
+        const err = errors.find(err => err.pos === e.detail.pos);
+        if (err) {
+            const index = errors.indexOf(err);
+            const cards = pane.querySelectorAll('.error-item');
+            cards.forEach(c => c.classList.remove('active'));
+            if (cards[index]) {
+                cards[index].classList.add('active');
+                cards[index].scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }
+        }
+    });
 }

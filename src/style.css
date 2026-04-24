@@ -440,10 +440,18 @@ html, body {
     border-left: 4px solid;
     box-shadow: var(--shadow-card);
     transition: all 150ms ease;
+    cursor: pointer;
 }
 
 .error-item:hover {
-    filter: brightness(1.1);
+    filter: brightness(1.15);
+    border-color: var(--accent-green);
+    box-shadow: 0 0 16px rgba(57, 255, 20, 0.15);
+}
+
+.error-item.active {
+    border-color: var(--accent-green) !important;
+    box-shadow: 0 0 12px rgba(57, 255, 20, 0.25);
 }
 
 .error-item.mismatch {
@@ -610,17 +618,20 @@ html, body {
 .cm-mismatch {
     background: rgba(226, 75, 74, 0.1) !important;
     border-bottom: 2px wavy var(--accent-error) !important;
+    cursor: pointer;
 }
 
 .cm-unclosed,
 .cm-unexpected {
     background: rgba(239, 159, 39, 0.1) !important;
     border-bottom: 2px wavy var(--accent-warning) !important;
+    cursor: pointer;
 }
 
 .cm-open-pair {
     background: rgba(46, 160, 67, 0.2) !important;
     border: 1px solid var(--accent-open) !important;
+    cursor: pointer;
 }
 
 /* ========================================
