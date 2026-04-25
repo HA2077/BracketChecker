@@ -10,16 +10,16 @@ enum class Mode{
 };
 
 struct Frame{
-    char ch;
+    std::string ch;
     int pos;
 };
 
 struct Error{
     std::string type;
     int pos;
-    char got; 
-    char expected; 
-    int pairedPos; 
+    std::string got;
+    std::string expected;
+    int pairedPos;
     std::vector<Frame> stackSnapshot;
 };
 
@@ -37,4 +37,9 @@ private:
     bool isClose(char c, Mode m);
     char matchingOpen(char closeChar);
     void skipString(const std::string &s, int &i);
+
+    bool isHtmlTagOpen(const std::string &s, int i, std::string &outTagName);
+    bool isHtmlTagClose(const std::string &s, int i, std::string &outTagName);
+    bool isHtmlVoidTag(const std::string &tagName);
+    bool isHtmlSelfClose(const std::string &s, int i);
 };

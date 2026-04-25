@@ -25,6 +25,11 @@ function escapeHTML(str){
     );
 }
 
+function tagDisplayName(tagStr) {
+    if (!tagStr) return '';
+    return tagStr.replace(/^<\/?/, '').replace(/>$/, '');
+}
+
 function formatStackSnapshot(snapshot) {
     if (!snapshot || snapshot.length === 0)
         return '<span class="stack-empty">empty stack</span>';
@@ -32,27 +37,27 @@ function formatStackSnapshot(snapshot) {
     return snapshot.map((frame, index) => {
         const isTop = index === snapshot.length - 1;
         const label = `L${frame.pos}`;
-        return `<span class="stack-pill ${isTop ? 'top' : ''}">${frame.ch} ${label}${isTop ? ' ← top' : ''}</span>`;
+        return `<span class="stack-pill ${isTop ? 'top' : ''}">&lt;${tagDisplayName(frame.ch)}&gt; ${label}${isTop ? ' ← top' : ''}</span>`;
     }).join(' ');
 }
 
 function formatTitle(err, locStr) {
     if (err.type === 'mismatch') return `Mismatch at ${locStr}`;
-    if (err.type === 'unclosed') return `Unclosed bracket at ${locStr}`;
-    return `Unexpected bracket at ${locStr}`;
+    if (err.type === 'unclosed') return `Unclosed tag at ${locStr}`;
+    return `Unexpected tag at ${locStr}`;
 }
 
 function formatMessage(err, text) {
-    const got = escapeHTML(err.got);
-    const expected = escapeHTML(err.expected);
+    const got = tagDisplayName(err.got);
+    const expected = tagDisplayName(err.expected);
     
     if (err.type === 'mismatch') {
         const openerLoc = getLineCol(text, err.pairedPos);
-        return `<strong>${got}</strong> cannot close opener from ${openerLoc}.<br>Did you mean <strong>${expected}</strong> ?`;
+        return `&lt;${escapeHTML(got)}&gt; cannot close opener from ${openerLoc}.<br>Did you mean &lt;<strong>${escapeHTML(expected)}</strong>&gt; ?`;
     }
     if (err.type === 'unclosed')
-        return `Bracket <strong>${got}</strong> opened but never closed.`;
-    return `Bracket <strong>${got}</strong> found with nothing open.`;
+        return `&lt;<strong>${escapeHTML(got)}</strong>&gt; opened but never closed.`;
+    return `&lt;<strong>${escapeHTML(got)}</strong>&gt; found with nothing open.`;
 }
 
 import { getEditorView } from './error-state.js';

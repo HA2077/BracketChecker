@@ -33,14 +33,14 @@ export function check(input, mode = 'JSON') {
             const snapshot = e.stackSnapshot 
                 ? Array.from({ length: e.stackSnapshot.size() }, (_, j) => {
                     const f = e.stackSnapshot.get(j);
-                    return { ch: String.fromCharCode(f.ch), pos: f.pos };
+                    return { ch: f.ch, pos: f.pos };
                 })
                 : [];
             return {
                 type: e.type,
                 pos: e.pos,
-                got: String.fromCharCode(e.got),
-                expected: e.expected ? String.fromCharCode(e.expected) : null,
+                got: e.got,
+                expected: e.expected || null,
                 pairedPos: e.pairedPos,
                 stackSnapshot: snapshot,
             };

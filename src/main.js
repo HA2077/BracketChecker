@@ -20,15 +20,14 @@ function initEditor() {
         debounceTimer = setTimeout(() => {
             hideWelcome();
             const mode = getActiveMode();
-            if (mode === 'HTML') return;
-
             const result = check(input, mode);
             
             renderErrors(result.errors, input);
             
             if (editorView && result.errors.length > 0) {
                 applyErrorDecorations(editorView, result.errors);
-                drawMultiArcs(editorView.dom, result.errors);
+                if (mode !== 'HTML')
+                    drawMultiArcs(editorView.dom, result.errors);
             } else if (editorView)
                 clearArcs(editorView.dom);
             
@@ -67,15 +66,6 @@ function runCheck() {
     const input = editorView ? editorView.state.doc.toString() : '';
     const mode = getActiveMode();
     const appMain = document.querySelector('.app-main');
-    if (mode === 'HTML') {
-        appMain.classList.add('html-mode');
-        renderHtmlComingSoon();
-        clearArcs(document.getElementById('editor-pane'));
-        updateStatusBadge(false, 0);
-        document.getElementById('status-badge').textContent = '';
-        document.getElementById('status-badge').className = 'status-badge';
-        return;
-    }
     appMain.classList.remove('html-mode');
     if (input) {
         const result = check(input, mode);
@@ -85,7 +75,8 @@ function runCheck() {
         if (editorView) {
             if (result.errors.length > 0) {
                 applyErrorDecorations(editorView, result.errors);
-                drawMultiArcs(editorView.dom, result.errors);
+                if (mode !== 'HTML')
+                    drawMultiArcs(editorView.dom, result.errors);
             } else {
                 clearArcs(editorView.dom);
             }
@@ -103,17 +94,6 @@ function runCheck() {
     }
 }
 
-function renderHtmlComingSoon(){
-    const pane = document.getElementById('error-pane');
-    pane.innerHTML = `
-        <div class="coming-soon">
-            <div class="coming-soon-icon">🚧</div>
-            <h2>HTML Mode Coming Soon</h2>
-            <p>For now, try JSON or Math mode!</p>
-        </div>
-    `;
-}
-
 document.querySelectorAll('.mode-btn').forEach(btn => {
     btn.addEventListener('click', (e) => {
         document.querySelectorAll('.mode-btn').forEach(b => b.classList.remove('active'));
@@ -121,7 +101,7 @@ document.querySelectorAll('.mode-btn').forEach(btn => {
         document.getElementById('sample-selector').value = '';
         const mode = e.target.dataset.mode;
         
-        if (mode === 'JSON' || mode === 'MATH') {
+        if (mode === 'JSON' || mode === 'MATH' || mode === 'HTML') {
             editorView.dispatch({
                 changes: { from: 0, to: editorView.state.doc.length, insert: '' }
             });
@@ -142,7 +122,11 @@ const SAMPLES = {
     'unexpected': { mode: 'JSON', text: '"name": "Ali" }' },
     'multiple': { mode: 'JSON', text: '{ [ ( ] ) }' },
     'valid_math': { mode: 'MATH', text: '(3 + [2 * (1 + 4)])' },
-    'broken_math': { mode: 'MATH', text: '(3 * [2 + 1 )' }
+    'broken_math': { mode: 'MATH', text: '(3 * [2 + 1 )' },
+    'valid_html': { mode: 'HTML', text: '<div><span>Hello</span></div>' },
+    'html_mismatch': { mode: 'HTML', text: '<div></span>' },
+    'html_unclosed': { mode: 'HTML', text: '<div><p>' },
+    'html_unexpected': { mode: 'HTML', text: '</div><div></div>' },
 };
 
 document.getElementById('sample-selector').addEventListener('change', (e) => {
