@@ -20,7 +20,7 @@
         <div class="header-center">
             <div id="mode-selector" class="mode-selector">
                 <button class="mode-btn active" data-mode="JSON">JSON/C style Brackets</button>
-                <button class="mode-btn" data-mode="HTML">HTML</button>
+                <button class="mode-btn" data-mode="HTML">HTML/XML</button>
                 <button class="mode-btn" data-mode="MATH">Math</button>
             </div>
             <span id="status-badge" class="status-badge"></span>
@@ -33,9 +33,14 @@
                     <option value="unexpected">Unexpected</option>
                     <option value="multiple">Multiple errors</option>
                 </optgroup>
-                <optgroup label="Math Errors">
+                <optgroup label="Math Expressions">
                     <option value="valid_math">Valid math</option>
-                    <option value="broken_math">Broken math</option>
+                    <option value="math_double_op">Double operator (1 +* 2)</option>
+                    <option value="math_start_op">Starts with operator (*2 + 1)</option>
+                    <option value="math_end_op">Ends with operator (1 + 2 *)</option>
+                    <option value="math_paren_close">Operator before ) (1 +)</option>
+                    <option value="math_missing_op">Missing operator (1(2 + 3))</option>
+                    <option value="math_both">Both errors ((1 +* 2)</option>
                 </optgroup>
                 <optgroup label="HTML Errors">
                     <option value="valid_html">Valid HTML</option>

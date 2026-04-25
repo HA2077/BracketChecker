@@ -463,6 +463,21 @@ html, body {
     border-left-color: var(--accent-warning);
 }
 
+.error-item.syntax {
+    background: rgba(88, 70, 192, 0.15);
+    border-left: 3px solid #8A7BF2;
+}
+
+.error-item.syntax .err-icon {
+    background: rgba(138, 123, 242, 0.2);
+    color: #A69CF8;
+}
+
+.error-item.syntax .err-msg strong {
+    background: rgba(138, 123, 242, 0.2);
+    color: #A69CF8;
+}
+
 .err-icon {
     display: flex;
     align-items: center;
@@ -632,6 +647,12 @@ html, body {
     background: rgba(46, 160, 67, 0.2) !important;
     border: 1px solid var(--accent-open) !important;
     cursor: pointer;
+}
+
+.cm-syntax-error {
+    background: rgba(138, 123, 242, 0.15) !important;
+    border-bottom: 1.5px wavy #8A7BF2 !important;
+    text-decoration-thickness: 1.5px;
 }
 
 /* ========================================

@@ -9,6 +9,7 @@ export const setErrors = StateEffect.define();
 const mismatchMark = Decoration.mark({ class: 'cm-mismatch' });
 const unclosedMark = Decoration.mark({ class: 'cm-unclosed' });
 const unexpectedMark = Decoration.mark({ class: 'cm-unexpected' });
+const syntaxMark = Decoration.mark({ class: 'cm-syntax-error' });
 const openMark = Decoration.mark({ class: 'cm-open-pair' });
 
 function posToRange(doc, charPos){
@@ -36,6 +37,8 @@ function getDecorations(errors, doc) {
             decorations.push(unclosedMark.range(range.from, range.to));
         else if (err.type === 'unexpected')
             decorations.push(unexpectedMark.range(range.from, range.to));
+        else if (err.type === 'syntax')
+            decorations.push(syntaxMark.range(range.from, range.to));
     }
     
     return Decoration.set(decorations, true);

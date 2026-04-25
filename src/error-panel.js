@@ -44,7 +44,18 @@ function formatStackSnapshot(snapshot) {
 function formatTitle(err, locStr) {
     if (err.type === 'mismatch') return `Mismatch at ${locStr}`;
     if (err.type === 'unclosed') return `Unclosed tag at ${locStr}`;
-    return `Unexpected tag at ${locStr}`;
+    if (err.type === 'unexpected') return `Unexpected tag at ${locStr}`;
+    if (err.type === 'syntax') return `Syntax error at ${locStr}`;
+    return `Error at ${locStr}`;
+}
+
+function formatSyntaxMessage(err) {
+    const c = err.got;
+    const isOp = c === '+' || c === '-' || c === '*' || c === '/';
+    if (isOp) return `Unexpected operator <code>${escapeHTML(c)}</code> here — cannot follow another operator or opening bracket`;
+    if (c === '(' || c === '[') return `Missing operator before <code>${escapeHTML(c)}</code>`;
+    if (c === ')' || c === ']') return `Operator before closing bracket <code>${escapeHTML(c)}</code> — expression incomplete`;
+    return `Unexpected token <code>${escapeHTML(c)}</code>`;
 }
 
 function formatMessage(err, text) {
@@ -57,7 +68,11 @@ function formatMessage(err, text) {
     }
     if (err.type === 'unclosed')
         return `&lt;<strong>${escapeHTML(got)}</strong>&gt; opened but never closed.`;
-    return `&lt;<strong>${escapeHTML(got)}</strong>&gt; found with nothing open.`;
+    if (err.type === 'unexpected')
+        return `&lt;<strong>${escapeHTML(got)}</strong>&gt; found with nothing open.`;
+    if (err.type === 'syntax')
+        return formatSyntaxMessage(err);
+    return `Unknown error`;
 }
 
 import { getEditorView } from './error-state.js';
@@ -91,14 +106,23 @@ export function renderErrors(errors, input) {
  
     errors.forEach((err, index) => {
         const locStr = getLineCol(input, err.pos);
-        const stackHtml = formatStackSnapshot(err.stackSnapshot);
+        const stackHtml = err.stackSnapshot && err.stackSnapshot.length > 0 
+            ? formatStackSnapshot(err.stackSnapshot) 
+            : '<span class="stack-empty">no stack for syntax errors</span>';
+        
+        const icon = {
+            mismatch: '!',
+            unclosed: '~',
+            unexpected: '?',
+            syntax: '×',
+        }[err.type] || '!';
         
         const card = document.createElement('div');
         card.className = `error-item ${err.type}`;
         card.dataset.index = index;
         
         card.innerHTML = `
-            <div class="err-icon">${err.type === 'mismatch' ? '!' : '~'}</div>
+            <div class="err-icon">${icon}</div>
             <div class="err-body">
                 <p class="err-title">${formatTitle(err, locStr)}</p>
                 <p class="err-msg">${formatMessage(err, input)}</p>

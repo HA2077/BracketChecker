@@ -121,8 +121,15 @@ const SAMPLES = {
     'unclosed': { mode: 'JSON', text: '{ "name": "Ali", "scores": [88, 92' },
     'unexpected': { mode: 'JSON', text: '"name": "Ali" }' },
     'multiple': { mode: 'JSON', text: '{ [ ( ] ) }' },
-    'valid_math': { mode: 'MATH', text: '(3 + [2 * (1 + 4)])' },
-    'broken_math': { mode: 'MATH', text: '(3 * [2 + 1 )' },
+    
+    'valid_math': { mode: 'MATH', text: '(1 + 2) * [3 - 4] / (5 + 6)' },
+    'math_double_op': { mode: 'MATH', text: '1 +* 2' },
+    'math_start_op': { mode: 'MATH', text: '* 2 + 1' },
+    'math_end_op': { mode: 'MATH', text: '1 + 2 *' },
+    'math_paren_close': { mode: 'MATH', text: '(1 +)' },
+    'math_missing_op': { mode: 'MATH', text: '1(2 + 3)' },
+    'math_both': { mode: 'MATH', text: '(1 +* 2' },
+    
     'valid_html': { mode: 'HTML', text: '<div><span>Hello</span></div>' },
     'html_mismatch': { mode: 'HTML', text: '<div></span>' },
     'html_unclosed': { mode: 'HTML', text: '<div><p>' },
