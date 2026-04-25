@@ -9,6 +9,14 @@ enum class Mode{
     MATH
 };
 
+enum class TokenType {
+    NUMBER,
+    OPERATOR,
+    OPEN,
+    CLOSE,
+    INVALID
+};
+
 struct Frame{
     std::string ch;
     int pos;
@@ -31,12 +39,14 @@ struct CheckResult{
 class SyntaxChecker{
 public:
     CheckResult check(const std::string &input, Mode mode);
+    std::vector<Error> checkMathSyntax(const std::string& input);
 
 private:
     bool isOpen(char c, Mode m);
     bool isClose(char c, Mode m);
     char matchingOpen(char closeChar);
     void skipString(const std::string &s, int &i);
+    TokenType classifyMathToken(char c);
 
     bool isHtmlTagOpen(const std::string &s, int i, std::string &outTagName);
     bool isHtmlTagClose(const std::string &s, int i, std::string &outTagName);

@@ -1,4 +1,5 @@
 #include "syntax_checker.h"
+#include <algorithm>
 #include <cctype>
 #include <stack>
 #include <vector>
@@ -35,6 +36,66 @@ void SyntaxChecker::skipString(const std::string &s, int &i){
         }
         i++;
     }
+}
+
+TokenType SyntaxChecker::classifyMathToken(char c) {
+    if (isdigit(c) || c == '.')                          return TokenType::NUMBER;
+    if (c == '+' || c == '-' || c == '*' || c == '/')    return TokenType::OPERATOR;
+    if (c == '(' || c == '[')                            return TokenType::OPEN;
+    if (c == ')' || c == ']')                            return TokenType::CLOSE;
+    return TokenType::INVALID;
+}
+
+std::vector<Error> SyntaxChecker::checkMathSyntax(const std::string& input) {
+    std::vector<Error> errors;
+
+    TokenType prev = TokenType::OPEN;
+    int       lastPos = -1;
+
+    for (int i = 0; i < (int)input.size(); i++) {
+        if (isspace(input[i])) continue;
+
+        TokenType cur = classifyMathToken(input[i]);
+        lastPos = i;
+
+        bool        bad = false;
+
+        switch (cur) {
+            case TokenType::OPERATOR:
+                if (prev == TokenType::OPERATOR || prev == TokenType::OPEN)
+                    bad = true;
+                
+                break;
+
+            case TokenType::NUMBER:
+                if (prev == TokenType::CLOSE)
+                    bad = true;
+
+                break;
+
+            case TokenType::OPEN:
+                if (prev == TokenType::NUMBER || prev == TokenType::CLOSE) {
+                    bad = true;
+                }
+                break;
+
+            case TokenType::CLOSE:
+                break;
+
+            case TokenType::INVALID:
+                break;
+        }
+
+        if (bad)
+            errors.push_back({ "syntax", i, std::string(1, input[i]), "", -1, {} });
+
+        if (cur != TokenType::INVALID) prev = cur;
+    }
+
+    if (prev == TokenType::OPERATOR && lastPos != -1)
+        errors.push_back({ "syntax", lastPos, std::string(1, input[lastPos]), "", -1, {} });
+
+    return errors;
 }
 
 bool SyntaxChecker::isHtmlTagOpen(const std::string &s, int i, std::string &outTagName){
@@ -163,6 +224,16 @@ CheckResult SyntaxChecker::check(const std::string &input, Mode mode){
         Error err{"unclosed", f.pos, "<" + f.ch + ">", "", -1, stackToVector(stck)};
         result.valid = false;
         result.errors.push_back(err);
+    }
+
+    if (mode == Mode::MATH) {
+        std::vector<Error> syntaxErrors = checkMathSyntax(input);
+        for (auto& e : syntaxErrors) {
+            result.valid = false;
+            result.errors.push_back(e);
+        }
+        std::sort(result.errors.begin(), result.errors.end(),
+            [](const Error& a, const Error& b) { return a.pos < b.pos; });
     }
 
     return result;
