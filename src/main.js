@@ -28,8 +28,11 @@ function initEditor() {
                 applyErrorDecorations(editorView, result.errors);
                 if (mode !== 'HTML')
                     drawMultiArcs(editorView.dom, result.errors);
-            } else if (editorView)
+            } 
+            else if (editorView) {
+                applyErrorDecorations(editorView, []);
                 clearArcs(editorView.dom);
+            }
             
             updateStatusBadge(result.valid, result.errors.length);
             updateTabTitle(result.valid, result.errors.length);
@@ -49,7 +52,8 @@ function updateStatusBadge(valid, count) {
     if (valid) {
         badge.textContent = '✓ valid';
         badge.className = 'status-badge badge-ok';
-    } else {
+    } 
+    else {
         badge.textContent = `${count} error${count > 1 ? 's' : ''}`;
         badge.className = 'status-badge badge-err';
     }
@@ -77,7 +81,9 @@ function runCheck() {
                 applyErrorDecorations(editorView, result.errors);
                 if (mode !== 'HTML')
                     drawMultiArcs(editorView.dom, result.errors);
-            } else {
+            } 
+            else {
+                applyErrorDecorations(editorView, []);
                 clearArcs(editorView.dom);
             }
         }
