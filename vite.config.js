@@ -1,4 +1,5 @@
 export default{
+    base: '/BracketChecker/',
     optimizeDeps: { exclude: ['checker.js'] },
     server: {
         headers: {
