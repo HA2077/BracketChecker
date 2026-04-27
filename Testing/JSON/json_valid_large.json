@@ -1,0 +1,179 @@
+{
+  "project": "BracketChecker",
+  "version": "2.1.0",
+  "environment": "production",
+  "settings": {
+    "editor": {
+      "theme": "dark",
+      "fontSize": 14,
+      "fontFamily": "JetBrains Mono",
+      "tabSize": 4,
+      "wordWrap": true,
+      "minimap": {
+        "enabled": true,
+        "scale": 1,
+        "showSlider": "mouseover"
+      },
+      "scrollbar": {
+        "vertical": "auto",
+        "horizontal": "auto",
+        "useShadows": true
+      }
+    },
+    "validation": {
+      "debounceMs": 150,
+      "maxFileSize": 1048576,
+      "modes": [
+        "JSON",
+        "HTML",
+        "MATH"
+      ],
+      "features": {
+        "liveCheck": true,
+        "showArcs": true,
+        "stackVisualizer": true,
+        "suggestions": true
+      }
+    }
+  },
+  "users": [
+    {
+      "id": 1,
+      "username": "alice_dev",
+      "email": "alice@example.com",
+      "roles": [
+        "admin",
+        "developer"
+      ],
+      "preferences": {
+        "notifications": {
+          "email": true,
+          "push": false,
+          "desktop": true
+        },
+        "shortcuts": {
+          "save": "Ctrl+S",
+          "check": "Ctrl+Enter",
+          "format": "Shift+Alt+F"
+        }
+      },
+      "projects": [
+        {
+          "name": "web-app",
+          "status": "active",
+          "lastCommit": "2026-04-20T14:30:00Z"
+        },
+        {
+          "name": "api-gateway",
+          "status": "archived",
+          "lastCommit": "2026-03-15T09:12:00Z"
+        },
+        {
+          "name": "mobile-client",
+          "status": "active",
+          "lastCommit": "2026-04-25T18:45:00Z"
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "username": "bob_builder",
+      "email": "bob@example.com",
+      "roles": [
+        "developer"
+      ],
+      "preferences": {
+        "notifications": {
+          "email": false,
+          "push": true,
+          "desktop": false
+        },
+        "shortcuts": {
+          "save": "Cmd+S",
+          "check": "Cmd+Enter",
+          "format": "Shift+Option+F"
+        }
+      },
+      "projects": [
+        {
+          "name": "data-pipeline",
+          "status": "active",
+          "lastCommit": "2026-04-26T11:20:00Z"
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "username": "charlie_ops",
+      "email": "charlie@example.com",
+      "roles": [
+        "viewer"
+      ],
+      "preferences": {
+        "notifications": {
+          "email": true,
+          "push": true,
+          "desktop": false
+        }
+      },
+      "projects": []
+    }
+  ],
+  "integrations": {
+    "github": {
+      "enabled": true,
+      "clientId": "gh_client_12345",
+      "scopes": [
+        "repo",
+        "read:user"
+      ],
+      "webhook": {
+        "url": "https://api.example.com/webhooks/github",
+        "secret": "whsec_xxxxxxxx",
+        "events": [
+          "push",
+          "pull_request",
+          "issues"
+        ]
+      }
+    },
+    "slack": {
+      "enabled": false,
+      "workspace": "team-workspace",
+      "channels": {
+        "alerts": "#dev-alerts",
+        "general": "#general"
+      }
+    },
+    "s3": {
+      "enabled": true,
+      "bucket": "bracket-checker-assets",
+      "region": "us-east-1",
+      "cdn": {
+        "enabled": true,
+        "domain": "cdn.example.com"
+      }
+    }
+  },
+  "logging": {
+    "level": "info",
+    "format": "json",
+    "outputs": [
+      {
+        "type": "console",
+        "colorize": true
+      },
+      {
+        "type": "file",
+        "path": "/var/log/app.log",
+        "maxSize": "10MB",
+        "maxFiles": 5
+      },
+      {
+        "type": "http",
+        "endpoint": "https://logs.example.com/ingest",
+        "batchSize": 100
+      }
+    ]
+  }
+}

@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard - Broken</title>
+  <link rel="stylesheet" href="/styles/main.css">
+</head>
+<body>
+  <header class="app-header">
+    <nav class="nav-primary">
+      <div class="nav-brand">
+        <img src="/assets/logo.svg" alt="Logo" class="nav-logo">
+        <span class="nav-title">BracketChecker</span>
+      </div>
+      <ul class="nav-links">
+        <li><a href="/dashboard" class="nav-link active">Dashboard</a></li>
+        <li><a href="/projects" class="nav-link">Projects</a></li>
+        <li><a href="/settings" class="nav-link">Settings</a></li>
+      </ul>
+    </nav>
+  </div>
+
+  <main class="app-main">
+    <aside class="sidebar">
+      <div class="sidebar-section">
+        <h3 class="sidebar-title">Workspace</h3>
+        <ul class="sidebar-list">
+          <li class="sidebar-item active">
+            <span class="icon">📁</span>
+            <span class="label">My Projects</span>
+          </li>
+          <li class="sidebar-item">
+            <span class="icon">⭐</span>
+            <span class="label">Starred</span>
+          </li>
+        </ul>
+      </aside>
+
+    <section class="content">
+      <div class="content-header">
+        <h1 class="page-title">Project Overview</h1>
+        <div class="header-actions">
+          <button class="btn btn-primary">New Project</button>
+        </div>
+      </div>
+
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-value">24</div>
+          <div class="stat-label">Active Projects</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-value">1,429</div>
+          <div class="stat-label">Files Checked</div>
+        </div>
+      </div>
+
+      <div class="projects-table-wrapper">
+        <table class="projects-table">
+          <thead>
+            <tr>
+              <th>Project Name</th>
+              <th>Status</th>
+              <th>Errors</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>
+                <div class="project-info">
+                  <span class="project-icon">🌐</span>
+                  <div>
+                    <div class="project-name">Web Application</div>
+                  </div>
+                </div>
+              </td>
+              <td><span class="badge badge-success">Active</span></td>
+              <td><span class="count count-zero">0</span></td>
+            </tr>
+          </tbody>
+        </div>
+      </section>
+    </main>
+
+  <footer class="app-footer">
+    <div class="footer-content">
+      <p class="footer-copyright"> 2026 BracketChecker.</p>
+      <div class="footer-links">
+        <a href="/privacy">Privacy</a>
+        <a href="/terms">Terms</a>
+      </div>
+    </div>
+  </footer>
+
+  <script type="module" src="/scripts/app.js"></script>
+</body>
+</html>

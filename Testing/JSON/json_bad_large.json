@@ -1,0 +1,55 @@
+{
+  "project": "BracketChecker",
+  "version": "2.1.0",
+  "settings": {
+    "editor": {
+      "theme": "dark",
+      "fontSize": 14,
+      "options": ["wordWrap", "minimap", "lineNumbers"
+    },
+    "validation": {
+      "debounceMs": 150,
+      "modes": ["JSON", "HTML", "MATH"),
+      "features": {
+        "liveCheck": true,
+        "showArcs": true
+      }
+    }
+  },
+  "users": [
+    {
+      "id": 1,
+      "username": "alice_dev",
+      "roles": ["admin", "developer"],
+      "projects": [
+        {"name": "web-app", "status": "active"},
+        {"name": "api-gateway", "status": "archived"
+      ]
+    },
+    {
+      "id": 2,
+      "username": "bob_builder",
+      "roles": ["developer"],
+      "preferences": {
+        "notifications": {
+          "email": false,
+          "push": true
+        }
+      }
+    }
+  ],
+  "integrations": {
+    "github": {
+      "enabled": true,
+      "scopes": ["repo", "read:user"]
+    },
+    "slack": {
+      "enabled": false
+    }
+  },
+  "metadata": {
+    "created": "2026-01-15",
+    "updated": "2026-04-26",
+    "tags": ["tool", "validator", "wasm", "cpp"
+  }
+}

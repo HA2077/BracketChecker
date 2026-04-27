@@ -1,0 +1,15 @@
+((3.14159 * (radius ^ 2)) + (2 * 3.14159 * radius * height)) / (4.0 / 3.0 * 3.14159 * (radius ^ 3))
+
+((a + b) * (a - b)) / ((c + d) * (c - d)) + ((e * f) - (g / h)) * ((i + j) / (k - l))
+
+[((x1 - x2) ^ 2) + ((y1 - y2) ^ 2) + ((z1 - z2) ^ 2)] ^ 0.5
+
+((mass * (velocity ^ 2)) / 2) + (mass * 9.81 * height) + (0.5 * spring_constant * (displacement ^ 2))
+
+((principal * (1 + (rate / 100)) ^ time) - principal) / ((1 + (rate / 100)) ^ time - 1)
+
+((n * (n + 1) * (2 * n + 1)) / 6) + ((n * (n + 1)) / 2) ^ 2 - ((n ^ 2) * (n + 1) ^ 2) / 4
+
+((sin(angle) ^ 2) + (cos(angle) ^ 2)) * ((tan(angle) ^ 2) + 1) / ((sec(angle) ^ 2) - (tan(angle) ^ 2))
+
+((matrix_a[0][0] * matrix_a[1][1]) - (matrix_a[0][1] * matrix_a[1][0])) / ((matrix_b[0][0] * matrix_b[1][1]) - (matrix_b[0][1] * matrix_b[1][0]))

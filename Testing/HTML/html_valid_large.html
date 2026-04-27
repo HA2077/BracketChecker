@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard - BracketChecker</title>
+  <link rel="stylesheet" href="/styles/main.css">
+  <link rel="icon" type="image/svg+xml" href="/assets/logo.svg">
+</head>
+<body>
+  <header class="app-header">
+    <nav class="nav-primary">
+      <div class="nav-brand">
+        <img src="/assets/logo.svg" alt="Logo" class="nav-logo">
+        <span class="nav-title">BracketChecker</span>
+      </div>
+      <ul class="nav-links">
+        <li><a href="/dashboard" class="nav-link active">Dashboard</a></li>
+        <li><a href="/projects" class="nav-link">Projects</a></li>
+        <li><a href="/settings" class="nav-link">Settings</a></li>
+        <li><a href="/docs" class="nav-link">Documentation</a></li>
+      </ul>
+      <div class="nav-user">
+        <button class="btn-notification" aria-label="Notifications">
+          <span class="badge-count">3</span>
+        </button>
+        <div class="user-menu">
+          <img src="/avatars/alice.jpg" alt="Alice" class="user-avatar">
+          <span class="user-name">Alice Developer</span>
+        </div>
+      </div>
+    </nav>
+  </header>
+
+  <main class="app-main">
+    <aside class="sidebar">
+      <div class="sidebar-section">
+        <h3 class="sidebar-title">Workspace</h3>
+        <ul class="sidebar-list">
+          <li class="sidebar-item active">
+            <span class="icon">📁</span>
+            <span class="label">My Projects</span>
+          </li>
+          <li class="sidebar-item">
+            <span class="icon">⭐</span>
+            <span class="label">Starred</span>
+          </li>
+          <li class="sidebar-item">
+            <span class="icon">🕐</span>
+            <span class="label">Recent</span>
+          </li>
+        </ul>
+      </div>
+      <div class="sidebar-section">
+        <h3 class="sidebar-title">Tools</h3>
+        <ul class="sidebar-list">
+          <li class="sidebar-item">
+            <span class="icon">🔧</span>
+            <span class="label">Validator</span>
+          </li>
+          <li class="sidebar-item">
+            <span class="icon">📊</span>
+            <span class="label">Analytics</span>
+          </li>
+        </ul>
+      </div>
+    </aside>
+
+    <section class="content">
+      <div class="content-header">
+        <h1 class="page-title">Project Overview</h1>
+        <div class="header-actions">
+          <button class="btn btn-secondary">Import</button>
+          <button class="btn btn-primary">New Project</button>
+        </div>
+      </div>
+
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-value">24</div>
+          <div class="stat-label">Active Projects</div>
+          <div class="stat-trend up">+12% this month</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-value">1,429</div>
+          <div class="stat-label">Files Checked</div>
+          <div class="stat-trend up">+8% this week</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-value">98.2%</div>
+          <div class="stat-label">Accuracy Rate</div>
+          <div class="stat-trend stable">— consistent</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-value">3</div>
+          <div class="stat-label">Team Members</div>
+          <div class="stat-trend up">+1 new</div>
+        </div>
+      </div>
+
+      <div class="projects-table-wrapper">
+        <table class="projects-table">
+          <thead>
+            <tr>
+              <th>Project Name</th>
+              <th>Status</th>
+              <th>Last Check</th>
+              <th>Errors</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>
+                <div class="project-info">
+                  <span class="project-icon">🌐</span>
+                  <div>
+                    <div class="project-name">Web Application</div>
+                    <div class="project-path">/projects/web-app</div>
+                  </div>
+                </div>
+              </td>
+              <td><span class="badge badge-success">Active</span></td>
+              <td>2 minutes ago</td>
+              <td><span class="count count-zero">0</span></td>
+              <td>
+                <button class="btn-icon" title="Edit">✏️</button>
+                <button class="btn-icon" title="Delete">🗑️</button>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <div class="project-info">
+                  <span class="project-icon">⚙️</span>
+                  <div>
+                    <div class="project-name">API Gateway</div>
+                    <div class="project-path">/projects/api-gateway</div>
+                  </div>
+                </div>
+              </td>
+              <td><span class="badge badge-warning">Review</span></td>
+              <td>1 hour ago</td>
+              <td><span class="count count-warning">3</span></td>
+              <td>
+                <button class="btn-icon" title="Edit">✏️</button>
+                <button class="btn-icon" title="Delete">🗑️</button>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <div class="project-info">
+                  <span class="project-icon">📱</span>
+                  <div>
+                    <div class="project-name">Mobile Client</div>
+                    <div class="project-path">/projects/mobile-client</div>
+                  </div>
+                </div>
+              </td>
+              <td><span class="badge badge-success">Active</span></td>
+              <td>5 hours ago</td>
+              <td><span class="count count-zero">0</span></td>
+              <td>
+                <button class="btn-icon" title="Edit">✏️</button>
+                <button class="btn-icon" title="Delete">🗑️</button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+  </main>
+
+  <footer class="app-footer">
+    <div class="footer-content">
+      <p class="footer-copyright"> 2026 BracketChecker. All rights reserved.</p>
+      <div class="footer-links">
+        <a href="/privacy">Privacy</a>
+        <a href="/terms">Terms</a>
+        <a href="/help">Help Center</a>
+        <a href="https://github.com/HA2077/BracketChecker" target="_blank">GitHub</a>
+      </div>
+    </div>
+  </footer>
+
+  <script type="module" src="/scripts/app.js"></script>
+</body>
+</html>
