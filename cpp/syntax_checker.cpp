@@ -23,26 +23,34 @@ char SyntaxChecker::matchingOpen(char close){
     return 0;
 }
 
+char SyntaxChecker::matchingClose(char open){
+    if (open == '(') return ')';
+    if (open == '[') return ']';
+    if (open == '{') return '}';
+    return 0;
+}
+
 void SyntaxChecker::skipString(const std::string &s, int &i){
-    i++;
+    i++;  // move past opening quote
     while (i < (int)s.size()){
         if (s[i] == '\\'){
             i += 2;
+            if (i > (int)s.size()) i = s.size();  // bounds check
             continue;
         }
-        if (s[i] == '"'){
-            i++;
-            break;
-        }
+        if (s[i] == '"')
+            break; 
         i++;
     }
 }
 
 TokenType SyntaxChecker::classifyMathToken(char c) {
     if (isdigit(c) || c == '.')                          return TokenType::NUMBER;
-    if (c == '+' || c == '-' || c == '*' || c == '/')    return TokenType::OPERATOR;
+    if (c == '+' || c == '-' || c == '*' || c == '/' || c == '^')
+        return TokenType::OPERATOR;
     if (c == '(' || c == '[')                            return TokenType::OPEN;
     if (c == ')' || c == ']')                            return TokenType::CLOSE;
+    if (isalpha(c) || c == '_')                          return TokenType::NUMBER;  // variables are operands
     return TokenType::INVALID;
 }
 
@@ -58,28 +66,28 @@ std::vector<Error> SyntaxChecker::checkMathSyntax(const std::string& input) {
         TokenType cur = classifyMathToken(input[i]);
         lastPos = i;
 
-        bool        bad = false;
+        // You know i'm bad i'm bad
+        bool bad = false;
 
         switch (cur) {
             case TokenType::OPERATOR:
                 if (prev == TokenType::OPERATOR || prev == TokenType::OPEN)
                     bad = true;
-                
                 break;
 
             case TokenType::NUMBER:
                 if (prev == TokenType::CLOSE)
                     bad = true;
-
                 break;
 
             case TokenType::OPEN:
-                if (prev == TokenType::NUMBER || prev == TokenType::CLOSE) {
+                if (prev == TokenType::NUMBER || prev == TokenType::CLOSE)
                     bad = true;
-                }
                 break;
 
             case TokenType::CLOSE:
+                if (prev == TokenType::OPERATOR || prev == TokenType::OPEN)
+                    bad = true;
                 break;
 
             case TokenType::INVALID:
@@ -176,16 +184,17 @@ CheckResult SyntaxChecker::check(const std::string &input, Mode mode){
                     result.valid = false;
                     Error err{"unexpected", i, "</" + tagName + ">", "", -1, {}};
                     result.errors.push_back(err);
-                } else {
+                } 
+                else {
                     Frame top = stck.top();
                     if (top.ch != tagName){
                         result.valid = false;
                         Error err{"mismatch", i, "</" + tagName + ">", "<" + top.ch + ">", top.pos, stackToVector(stck)};
                         result.errors.push_back(err);
                         stck.pop();
-                    } else {
+                    } 
+                    else
                         stck.pop();
-                    }
                 }
                 continue;
             }
@@ -208,12 +217,14 @@ CheckResult SyntaxChecker::check(const std::string &input, Mode mode){
                 Frame top = stck.top();
                 if (top.ch != std::string(1, matchingOpen(c))){
                     result.valid = false;
-                    Error err{"mismatch", i, std::string(1, c), std::string(1, matchingOpen(c)), top.pos, stackToVector(stck)};
+                    char needClose = matchingClose(top.ch[0]);
+                    std::string expectedStr = needClose ? std::string(1, needClose) : "";
+                    Error err{"mismatch", i, std::string(1, c), expectedStr, top.pos, stackToVector(stck)};
                     result.errors.push_back(err);
                     stck.pop();
-                } else {
+                } 
+                else
                     stck.pop();
-                }
             }
         }
     }
@@ -226,11 +237,17 @@ CheckResult SyntaxChecker::check(const std::string &input, Mode mode){
         result.errors.push_back(err);
     }
 
-    if (mode == Mode::MATH) {
+    if (mode == Mode::MATH){
         std::vector<Error> syntaxErrors = checkMathSyntax(input);
-        for (auto& e : syntaxErrors) {
-            result.valid = false;
-            result.errors.push_back(e);
+        // Avoid duplicate errors at same position
+        for (auto& se : syntaxErrors) {
+            bool dup = false;
+            for (auto& be : result.errors)
+                if (be.pos == se.pos) { dup = true; break; }
+            if (!dup) {
+                result.valid = false;
+                result.errors.push_back(se);
+            }
         }
         std::sort(result.errors.begin(), result.errors.end(),
             [](const Error& a, const Error& b) { return a.pos < b.pos; });

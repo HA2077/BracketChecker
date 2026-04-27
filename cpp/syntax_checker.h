@@ -45,6 +45,7 @@ private:
     bool isOpen(char c, Mode m);
     bool isClose(char c, Mode m);
     char matchingOpen(char closeChar);
+    char matchingClose(char openChar);
     void skipString(const std::string &s, int &i);
     TokenType classifyMathToken(char c);
 
