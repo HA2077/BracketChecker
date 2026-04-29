@@ -158,7 +158,7 @@ This project was built as part of a Data Structures course. We'd like to thank:
 - **Course Instructor** - For the engaging assignment and guidance throughout the semester 
 - **Project Teammates** - For collaborating on the C++ core and testing various features
     * Abdallah Ashraf    [GitHub](https://github.com/Abdullah-Ashraf8)
-    * Adbelrahman Fathy  [GitHub](https://github.com/Jetstream6)
+    * Abdelrahman Fathy  [GitHub](https://github.com/Jetstream6)
     * Salam Mahgoub      [GitHub](https://github.com/spider769)
     * Ziad Wael          [GitHub](https://github.com/zyadwael152)
 - **Open Source Community** - For the amazing tools that made this possible:
